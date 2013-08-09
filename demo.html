@@ -1,0 +1,55 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+	<style type="text/css">
+		.wrap { width:100px; height:100px; display:inline-block; }
+		.wrap > svg { width:100px; height:100px;  }
+	</style>
+</head>
+<body>
+
+	<pre>This is a sample page... 
+go to console, type in PAGE.Modules.Demo</pre>
+	<div id="images"></div>
+	
+</body>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script src="page.js" type="text/javascript"></script>
+<script src="PageAddImage.js" type="text/javascript"></script>
+<script src="PageDispatcher.js" type="text/javascript"></script>
+<script type="text/javascript">
+	$(document).ready(function() {
+
+		PAGE.add("Modules.Demo", (function() {
+			var dog = {
+				$images : $("#images")
+				, all : {}
+			}
+
+			PAGE.wait("Image", function(Image) {
+
+				dog.Image = Image
+				dog.Images = PAGE.Images
+
+				for(var y = 1; y < 78; y++) {
+					var $image = dog.all["SVG/image_" + y + ".svg"] = $("<span class='wrap'>")
+					dog.$images.append($image)
+				}
+
+				Image.addWaitSVGBatch(dog.all, function($item, index, src) {
+					dog.all[src].append($item.clone())
+				}, function(newBatch) {
+					console.info("finished loading")
+					alert("finished loading")
+				})
+
+			})
+
+			return dog
+		}()))
+
+	})
+</script>
+</html>
